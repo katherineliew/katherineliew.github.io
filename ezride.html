@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>EzRide bus</title>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+    <style>
+      body { margin: 0; padding: 0; }
+      #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+      .map-overlay{
+        position:absolute;
+        left:0;
+        padding:10px;
+
+      }
+    </style>
+</head>
+<body>
+
+<div id="map"></div>
+<div class="map-overlay top"><button onclick="move()" style="font-sze:2em;">Show stops</button></div>
+
+<script>
+
+    // get token at https://account.mapbox.com
+    mapboxgl.accessToken = 'pk.eyJ1Ijoia2F0aGVyaW5lbGlldyIsImEiOiJja2ZoMWtjcGIwMHJuMnhsZHZnZzN1cnI4In0.ysawrQroCoR9fP2g16hBQQ';
+
+    var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-71.091542,42.358862],
+            zoom:15
+        })
+
+    var marker = new mapboxgl.Marker()
+        .setLngLat([-71.102506,42.354880])
+        .addTo(map);
+
+    const busStops = [
+      [-71.102506,42.354880],
+      [-71.106509,42.354314],
+      [-71.100696,42.357208],
+      [-71.093804,42.360603],
+      [-71.089401,42.362583],
+      [-71.082695,42.360799],
+      [-71.087643,42.359787],
+      [-71.094180,42.357845],
+      [-71.098377,42.356181]
+    ]
+
+    var counter = 0;
+    function move(){
+      setTimeout(()=>{
+        if (counter>= busStops.length) return;
+        marker.setLngLat(busStops[counter]);
+        counter++;
+        move()
+      }, 1000);
+    }
+
+</script>
+</body>
+</html>
+
+
+<!-- 
+
+mapbox://styles/mapbox/streets-v11
+mapbox://styles/mapbox/outdoors-v11
+mapbox://styles/mapbox/light-v10
+mapbox://styles/mapbox/dark-v10
+mapbox://styles/mapbox/satellite-v9
+mapbox://styles/mapbox/satellite-streets-v11
+
+ -->

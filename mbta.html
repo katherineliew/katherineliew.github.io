@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>MBTA</title>
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js"></script>
+<link href="https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css" rel="stylesheet" />
+<style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  .map-overlay{
+        position:absolute;
+        left:0;
+        padding:10px;}
+</style>
+</head>
+<body>
+  
+<div id="map"></div>
+<div class="map-overlay top"><button onclick="move()" style="font-sze:2em;">Show all buses</button></div>
+ 
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic29mdGV4cGVyaW1lbnQiLCJhIjoiY2tjMngyZm9rMDFvajJzczJ3aWo0bnh6aiJ9.Bc_qK9Xf8SFBXkFM_x2gpg';
+    
+    var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [-71.091542,42.358862],
+            zoom:12
+        })
+
+    async function run(){
+      const locations = await getBusLocation();
+      console.log(new Date());
+      console.log(locations);
+      setTimeout(run,15000);
+
+    }
+
+    var currentMarkers=[];
+    function move(){
+      getBusLocation()
+       setInterval(()=>{
+          
+          //console.log(currentMarkers);
+          if (currentMarkers!==null) {
+            for (var i = currentMarkers.length - 1; i >= 0; i--) {
+                currentMarkers[i].remove();
+                //console.log(currentMarkers);
+    }
+}
+          getBusLocation()
+        }, 10000);
+    }
+
+    
+    async function getBusLocation(){
+      const url = 'http://api-v3.mbta.com/vehicles?filter[route]=1&include=trip'
+      const response = await fetch(url);
+      const json = await response.json();
+      var busList=[];
+      json.data.forEach(data =>{
+            busList.push([data.attributes.longitude,data.attributes.latitude,data.attributes.bearing])
+          })
+        
+          busList.forEach(busList=>{
+            
+            var marker = new mapboxgl.Marker()
+            marker.setLngLat([busList[0],busList[1]])
+                .addTo(map);
+                currentMarkers.push(marker);
+            
+    }
+          )
+        
+        }
+      
+    
+</script>
+ 
+</body>
+</html>
