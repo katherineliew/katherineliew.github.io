@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+    .container {
+        width: 100%;
+    }
+    .title {
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        font-size: 2em;
+    }
+</style>
+
+</head>
+<body>
+<div id="title"></div>
+<div id="container"></div>
+
+<script>
+var query = 'dog';
+var apiKey = '7LzHKvaZaAylJUePuMZS2NnXYVsVgm61';
+var giphy = `https://api.giphy.com/v1/gifs/search?api_key=${apiKey}&q=${query}&limit=10&offset=0&rating=G&lang=en`
+var container=document.getElementById('container');
+var title=document.getElementById('title');
+
+
+async function fetchGiphy(){
+	var res = await fetch(giphy);
+	var json = await res.json();
+	console.log(json);
+    title.innerHTML += 'All results from Giphy for "' + query + '":';
+    json.data.forEach(data =>{
+        var img = document.createElement("IMG");
+        img.src = data.images.fixed_width.url;
+        img.id = data.id;
+        document.getElementById('container').appendChild(img);
+        //container.innerHTML += data.url + '<br>';
+	})
+    
+    // ------------------------------------
+	//	YOUR CODE
+	//	1 - Use fetch to giphys
+	//  2 - Use await, loop through data
+	//  3 - Write items to console
+	//  4 - Load images on browser
+	// ------------------------------------
+}
+fetchGiphy();
+
+</script>
+</body>
+</html>
